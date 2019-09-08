@@ -80,7 +80,7 @@ function demo_chart_2() {
 
 	myChart.setOption({
 		title : {
-			text : '到着: DEPARTURED(実績日時) - DEPARTURE(予定日時)',
+			text : '到着: ARRIVED(実績日時) - ARRIVAL(予定日時)',
 			left : 10
 		},
 		toolbox : {
