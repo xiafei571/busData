@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="spring.model.mapper.ResultMapper">
+
+	<resultMap type="domain.ChartData" id="chartResultMap">
+		<result property="data" column="data" />
+		<result property="value" column="value" />
+	</resultMap>
+
+	<select id="getAvgOfDepByHour" resultType="domain.ChartData"
+		resultMap="chartResultMap">
+		select
+		DATE_FORMAT(DT_DEPARTURE, '%Y-%m-%d %H ') AS data,
+		floor(AVG(TIMESTAMPDIFF(SECOND,DT_DEPARTURE, DT_DEPARTURED))) AS value
+		from T_H_RESULT where
+		YEAR(DT_DEPARTURE)>'2000' and
+		YEAR(DT_DEPARTURED)>'2000' and YEAR(DT_ARRIVAL)>'2000' and
+		YEAR(DT_ARRIVED)>'2000'
+		GROUP BY data ORDER BY data;
+	</select>
+
+	<select id="getAvgOfArrByHour" resultType="domain.ChartData"
+		resultMap="chartResultMap">
+		select
+		DATE_FORMAT(DT_ARRIVAL, '%Y-%m-%d %H ') AS data,
+		floor(AVG(TIMESTAMPDIFF(SECOND,DT_ARRIVAL, DT_ARRIVED))) AS value
+		from
+		T_H_RESULT where
+		YEAR(DT_DEPARTURE)>'2000' and
+		YEAR(DT_DEPARTURED)>'2000' and YEAR(DT_ARRIVAL)>'2000' and
+		YEAR(DT_ARRIVED)>'2000'
+		GROUP BY data ORDER BY data;
+	</select>
+	<select id="getAllOfDep" resultType="domain.ChartData"
+		resultMap="chartResultMap">
+		select DT_DEPARTURE as data,
+		floor(TIMESTAMPDIFF(SECOND,DT_DEPARTURE, DT_DEPARTURED)/60) AS value
+		from T_H_RESULT where
+		YEAR(DT_DEPARTURE)>'2000' and YEAR(DT_DEPARTURED)>'2000' and YEAR(DT_ARRIVAL)>'2000' and
+		YEAR(DT_ARRIVED)>'2000' GROUP BY N_CARNUM, data, value ORDER BY
+		data;
+	</select>
+	
+	<select id="getAllOfArr" resultType="domain.ChartData"
+        resultMap="chartResultMap">
+        select DT_ARRIVAL as data,
+        floor(TIMESTAMPDIFF(SECOND,DT_ARRIVAL, DT_ARRIVED)/60) AS value
+        from T_H_RESULT where
+        YEAR(DT_DEPARTURE)>'2000' and YEAR(DT_DEPARTURED)>'2000' and YEAR(DT_ARRIVAL)>'2000' and
+        YEAR(DT_ARRIVED)>'2000' GROUP BY N_CARNUM, data, value ORDER BY
+        data;
+    </select>
+
+
+</mapper>
+	
+	
