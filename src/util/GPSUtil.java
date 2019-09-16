@@ -36,7 +36,7 @@ public class GPSUtil {
 		return jpToWorld(jp256ToJp10(jp_lat), jp256ToJp10(jp_lon));
 	}
 
-	private static double[] jpToWorld(double jp_lat, double jp_lon) {
+	public static double[] jpToWorld(double jp_lat, double jp_lon) {
 		double lat = jp_lat - jp_lat * 0.00010695 + jp_lon * 0.000017464 + 0.0046017;
 		double lon = jp_lon - jp_lat * 0.000046038 - jp_lon * 0.000083043 + 0.010040;
 		System.out.println("世界測地系（lat）:" + lat);
