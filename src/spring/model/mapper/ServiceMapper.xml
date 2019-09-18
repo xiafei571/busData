@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="spring.model.mapper.ServiceMapper">
+
+	<resultMap type="domain.ServiceVO" id="serviceResultMap">
+		<id property="serviceId" column="N_SERVICEID" />
+		<result property="carNum" column="N_CARNUM" />
+		<result property="longitude" column="N_LONGITUDE" />
+		<result property="latitude" column="N_LATITUDE" />
+		<result property="received" column="DT_RECEIVED" />
+		<result property="speed" column="N_SPEED" />
+	</resultMap>
+
+	<select id="getServiceByHour" resultType="domain.ServiceVO"
+		resultMap="serviceResultMap">
+		select * from T_H_SERVICE WHERE N_SPEED &gt; 0 and
+		DT_RECEIVED &gt; #{start} AND DT_RECEIVED &lt; #{end} order by
+		N_CARNUM, DT_RECEIVED
+	</select>
+
+</mapper>
+	
+	
