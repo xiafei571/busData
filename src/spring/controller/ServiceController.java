@@ -34,4 +34,11 @@ public class ServiceController {
 		Result<List<ServiceVO>> result = new Result<List<ServiceVO>>(gpsService.getServiceByHour(timeIndex, timeSize));
 		return result;
 	}
+
+	@RequestMapping(value = "/map/json", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<String> getJson(HttpServletRequest request, ModelMap model, Integer timeIndex, Integer timeSize) {
+		Result<String> result = new Result<String>(gpsService.getServiceGeoJsonByHour(timeIndex, timeSize));
+		return result;
+	}
 }
