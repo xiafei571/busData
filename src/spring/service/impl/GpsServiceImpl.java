@@ -38,15 +38,77 @@ public class GpsServiceImpl implements GpsService {
 		c1.set(Calendar.HOUR_OF_DAY, timeIndex % 100);
 		return c1;
 	}
-	
+
 	@Override
 	public String getServiceGeoJsonByHourRefactor(Integer timeIndex, Integer timeSize) {
+		if (timeIndex == null || timeSize == null) {
+			timeIndex = 2019070108;
+			timeSize = 1;
+		}
+
 		List<ServiceVO> services = getServiceByHour(timeIndex, timeSize);
-		//TODO http://localhost:8080/busData/service/map
+		// TODO http://localhost:8080/busData/service/map
 		if (services.isEmpty())
 			return "";
-		
-		return "";
+
+		JSONArray featureList = new JSONArray();
+		Integer speed = services.get(0).getSpeed() / 10;
+		Integer carNum = services.get(0).getCarNum();
+		// 先初始化一个
+		JSONObject line = initLineObject(speed, carNum);
+		JSONArray coordinates = new JSONArray();
+		JSONObject geometry = new JSONObject();
+		geometry.put("type", "LineString");
+
+		for (int i = 1; i < services.size(); i++) {
+
+			if (carNum.equals(services.get(i).getCarNum())) {// 同车
+
+				if (speed.equals(services.get(i).getSpeed()/10)) {// 同速区间
+
+					coordinates.add(GPSUtil.jp256ToWorldJsonChange(services.get(i).getLatitude(),
+							services.get(i).getLongitude()));
+				} else {// 不同速
+					geometry.put("coordinates", coordinates);
+					line.put("geometry", geometry);
+					featureList.add(line);
+					// 创建新的json
+					speed = services.get(i).getSpeed()/10;
+					line = initLineObject(speed, carNum);
+					coordinates = new JSONArray();
+					geometry = new JSONObject();
+					geometry.put("type", "LineString");
+					if (i > 0) {// 把前一个点也加进去
+						coordinates.add(GPSUtil.jp256ToWorldJsonChange(services.get(i).getLatitude(),
+								services.get(i).getLongitude()));
+					}
+					coordinates.add(GPSUtil.jp256ToWorldJsonChange(services.get(i).getLatitude(),
+							services.get(i).getLongitude()));
+				}
+
+			} else {// 不同车
+					// 1.创建新的json
+				geometry.put("coordinates", coordinates);
+				line.put("geometry", geometry);
+				featureList.add(line);
+				// 创建新的json
+				carNum = services.get(i).getCarNum();
+				line = initLineObject(speed, carNum);
+				coordinates = new JSONArray();
+				geometry = new JSONObject();
+				geometry.put("type", "LineString");
+				coordinates.add(
+						GPSUtil.jp256ToWorldJsonChange(services.get(i).getLatitude(), services.get(i).getLongitude()));
+			}
+
+			if (i == services.size() - 1) {//最后一个了
+				geometry.put("coordinates", coordinates);
+				line.put("geometry", geometry);
+				featureList.add(line);
+			}
+		}
+
+		return featureList.toJSONString();
 	}
 
 	@Override

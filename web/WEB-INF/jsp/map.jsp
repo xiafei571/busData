@@ -26,6 +26,33 @@
 </head>
 <body>
 	<div class="container">
+		<form>
+			<div class="form-row">
+				<div class="col-2">
+					<input type="text" class="form-control" placeholder="年"
+						id="input_year" value="2019">
+				</div>
+				<div class="col-2">
+					<input type="text" class="form-control" placeholder="月"
+						id="input_month" value="07">
+				</div>
+				<div class="col-2">
+					<input type="text" class="form-control" placeholder="日"
+						id="input_day" value="01">
+				</div>
+				<div class="col-2">
+					<input type="text" class="form-control" placeholder="時"
+						id="input_hour" value="08">
+				</div>
+				<div class="col-2">
+					<input type="text" class="form-control" placeholder="時間間隔"
+						id="input_interval" value="01">
+				</div>
+				<div class="col-auto">
+					<a type="button" class="btn btn-primary mb-2" onclick="refreshData()">Submit</a>
+				</div>
+			</div>
+		</form>
 
 		<div id="mapid" style="height: 800px;"></div>
 	</div>
