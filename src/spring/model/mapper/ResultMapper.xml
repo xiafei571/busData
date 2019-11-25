@@ -8,6 +8,16 @@
 		<result property="value" column="value" />
 	</resultMap>
 
+	<resultMap type="domain.ResultVO" id="resultResultMap">
+		<id property="resultId" column="N_RESULTSID" />
+		<result property="dianame" column="SZ_DIANAME" />
+		<result property="carNum" column="N_CARNUM" />
+		<result property="departure" column="DT_DEPARTURE" />
+		<result property="departured" column="DT_DEPARTURED" />
+		<result property="arrival" column="DT_ARRIVAL" />
+		<result property="arrived" column="DT_ARRIVED" />
+	</resultMap>
+
 	<select id="getAvgOfDepByHour" resultType="domain.ChartData"
 		resultMap="chartResultMap">
 		select
@@ -37,20 +47,23 @@
 		select DT_DEPARTURE as data,
 		floor(TIMESTAMPDIFF(SECOND,DT_DEPARTURE, DT_DEPARTURED)/60) AS value
 		from T_H_RESULT where
-		YEAR(DT_DEPARTURE)>'2000' and YEAR(DT_DEPARTURED)>'2000' and YEAR(DT_ARRIVAL)>'2000' and
+		YEAR(DT_DEPARTURE)>'2000' and
+		YEAR(DT_DEPARTURED)>'2000' and YEAR(DT_ARRIVAL)>'2000' and
 		YEAR(DT_ARRIVED)>'2000' GROUP BY N_CARNUM, data, value ORDER BY
 		data;
 	</select>
-	
+
 	<select id="getAllOfArr" resultType="domain.ChartData"
-        resultMap="chartResultMap">
-        select DT_ARRIVAL as data,
-        floor(TIMESTAMPDIFF(SECOND,DT_ARRIVAL, DT_ARRIVED)/60) AS value
-        from T_H_RESULT where
-        YEAR(DT_DEPARTURE)>'2000' and YEAR(DT_DEPARTURED)>'2000' and YEAR(DT_ARRIVAL)>'2000' and
-        YEAR(DT_ARRIVED)>'2000' GROUP BY N_CARNUM, data, value ORDER BY
-        data;
-    </select>
+		resultMap="chartResultMap">
+		select DT_ARRIVAL as data,
+		floor(TIMESTAMPDIFF(SECOND,DT_ARRIVAL, DT_ARRIVED)/60) AS value
+		from
+		T_H_RESULT where
+		YEAR(DT_DEPARTURE)>'2000' and
+		YEAR(DT_DEPARTURED)>'2000' and YEAR(DT_ARRIVAL)>'2000' and
+		YEAR(DT_ARRIVED)>'2000' GROUP BY N_CARNUM, data, value ORDER BY
+		data;
+	</select>
 
 
 </mapper>

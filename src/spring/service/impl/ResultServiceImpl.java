@@ -8,7 +8,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import common.page.Pagination;
+import common.page.PaginationResult;
 import domain.ChartData;
+import domain.ResultVO;
 import spring.model.mapper.ResultMapper;
 import spring.service.ResultService;
 
@@ -76,6 +79,18 @@ public class ResultServiceImpl implements ResultService {
 		Map<String, List<Object>> result = new HashMap<String, List<Object>>();
 		result.put("dataList", dataList);
 		result.put("valueList", valueList);
+		return result;
+	}
+
+	@Override
+	public PaginationResult<List<ResultVO>> getBusList(Integer pageIndex, Integer pageSize) {
+		Pagination pagination = new Pagination(pageIndex, pageSize);
+		Integer count = resultMapper.getResultCount();
+		pagination.setTotalCount(count);
+
+		List<ResultVO> list = resultMapper.getBusList(pagination.getCursor(), pageSize);
+		PaginationResult<List<ResultVO>> result = new PaginationResult<List<ResultVO>>(pagination, list);
+
 		return result;
 	}
 

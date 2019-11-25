@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import common.Result;
+import common.page.PaginationResult;
+import domain.ResultVO;
 import spring.service.ResultService;
 
 @Controller
@@ -47,5 +49,12 @@ public class ResultController {
 	public Result<Map<String, List<Object>>> getAllOfArr() {
 		Result<Map<String, List<Object>>> result = new Result<Map<String, List<Object>>>(resultService.getAllOfArr());
 		return result;
+	}
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public String getBusList(Integer pageIndex, Integer pageSize, ModelMap modelMap) {
+		PaginationResult<List<ResultVO>> result = resultService.getBusList(pageIndex, pageSize);
+		modelMap.addAttribute("result", result);
+		return "busList";
 	}
 }

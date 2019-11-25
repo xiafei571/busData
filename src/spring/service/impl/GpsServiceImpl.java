@@ -18,6 +18,7 @@ import util.GPSUtil;
 @Component("gpsService")
 public class GpsServiceImpl implements GpsService {
 
+	private static final int SPEED_INTERVAL = 10;
 	@Autowired
 	private ServiceMapper serviceMapper;
 
@@ -52,7 +53,7 @@ public class GpsServiceImpl implements GpsService {
 			return "";
 
 		JSONArray featureList = new JSONArray();
-		Integer speed = services.get(0).getSpeed() / 10;
+		Integer speed = services.get(0).getSpeed() / SPEED_INTERVAL;
 		Integer carNum = services.get(0).getCarNum();
 		// 先初始化一个
 		JSONObject line = initLineObject(speed, carNum);
@@ -64,7 +65,7 @@ public class GpsServiceImpl implements GpsService {
 
 			if (carNum.equals(services.get(i).getCarNum())) {// 同车
 
-				if (speed.equals(services.get(i).getSpeed()/10)) {// 同速区间
+				if (speed.equals(services.get(i).getSpeed() / SPEED_INTERVAL)) {// 同速区间
 
 					coordinates.add(GPSUtil.jp256ToWorldJsonChange(services.get(i).getLatitude(),
 							services.get(i).getLongitude()));
@@ -73,14 +74,14 @@ public class GpsServiceImpl implements GpsService {
 					line.put("geometry", geometry);
 					featureList.add(line);
 					// 创建新的json
-					speed = services.get(i).getSpeed()/10;
+					speed = services.get(i).getSpeed() / SPEED_INTERVAL;
 					line = initLineObject(speed, carNum);
 					coordinates = new JSONArray();
 					geometry = new JSONObject();
 					geometry.put("type", "LineString");
 					if (i > 0) {// 把前一个点也加进去
-						coordinates.add(GPSUtil.jp256ToWorldJsonChange(services.get(i).getLatitude(),
-								services.get(i).getLongitude()));
+						coordinates.add(GPSUtil.jp256ToWorldJsonChange(services.get(i-1).getLatitude(),
+								services.get(i-1).getLongitude()));
 					}
 					coordinates.add(GPSUtil.jp256ToWorldJsonChange(services.get(i).getLatitude(),
 							services.get(i).getLongitude()));
@@ -101,7 +102,7 @@ public class GpsServiceImpl implements GpsService {
 						GPSUtil.jp256ToWorldJsonChange(services.get(i).getLatitude(), services.get(i).getLongitude()));
 			}
 
-			if (i == services.size() - 1) {//最后一个了
+			if (i == services.size() - 1) {// 最后一个了
 				geometry.put("coordinates", coordinates);
 				line.put("geometry", geometry);
 				featureList.add(line);
@@ -136,7 +137,7 @@ public class GpsServiceImpl implements GpsService {
 
 		for (int i = index; i < services.size(); i++) {
 			if (carNum.equals(services.get(i).getCarNum())) {// 同车
-				if (services.get(i).getSpeed() / 10 == speed) {// 同一速度范围
+				if (services.get(i).getSpeed() / SPEED_INTERVAL == speed) {// 同一速度范围
 					coordinates.add(GPSUtil.jp256ToWorldJsonChange(services.get(i).getLatitude(),
 							services.get(i).getLongitude()));
 
@@ -149,7 +150,7 @@ public class GpsServiceImpl implements GpsService {
 					}
 					// TODO 先把上一个点加进去
 					// 递归
-					initFeatureList(services, featureList, services.get(i).getSpeed() / 10, carNum, i);
+					initFeatureList(services, featureList, services.get(i).getSpeed() / SPEED_INTERVAL, carNum, i);
 					break;
 				}
 			} else {// 另一辆车

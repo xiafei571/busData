@@ -51,7 +51,7 @@ function refreshData() {
 						};
 					case 1:
 						return {
-							color : "#FF0000"
+							color : "#FFE000"
 						};
 					case 2:
 						return {
@@ -86,6 +86,14 @@ function refreshData() {
 							color : "#00C000"
 						};
 					case 10:
+						return {
+							color : "#00C000"
+						};
+					case 11:
+						return {
+							color : "#00C000"
+						};
+					case 12:
 						return {
 							color : "#00C000"
 						};
