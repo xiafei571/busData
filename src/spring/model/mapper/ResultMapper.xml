@@ -23,7 +23,7 @@
 		select
 		DATE_FORMAT(DT_DEPARTURE, '%Y-%m-%d %H ') AS data,
 		floor(AVG(TIMESTAMPDIFF(SECOND,DT_DEPARTURE, DT_DEPARTURED))) AS value
-		from T_H_RESULT where
+		from T_H_RESULT where status=1 and
 		YEAR(DT_DEPARTURE)>'2000' and
 		YEAR(DT_DEPARTURED)>'2000' and YEAR(DT_ARRIVAL)>'2000' and
 		YEAR(DT_ARRIVED)>'2000'
@@ -36,7 +36,7 @@
 		DATE_FORMAT(DT_ARRIVAL, '%Y-%m-%d %H ') AS data,
 		floor(AVG(TIMESTAMPDIFF(SECOND,DT_ARRIVAL, DT_ARRIVED))) AS value
 		from
-		T_H_RESULT where
+		T_H_RESULT where status=1 and
 		YEAR(DT_DEPARTURE)>'2000' and
 		YEAR(DT_DEPARTURED)>'2000' and YEAR(DT_ARRIVAL)>'2000' and
 		YEAR(DT_ARRIVED)>'2000'
@@ -46,7 +46,7 @@
 		resultMap="chartResultMap">
 		select DT_DEPARTURE as data,
 		floor(TIMESTAMPDIFF(SECOND,DT_DEPARTURE, DT_DEPARTURED)/60) AS value
-		from T_H_RESULT where
+		from T_H_RESULT where status=1 and
 		YEAR(DT_DEPARTURE)>'2000' and
 		YEAR(DT_DEPARTURED)>'2000' and YEAR(DT_ARRIVAL)>'2000' and
 		YEAR(DT_ARRIVED)>'2000' GROUP BY N_CARNUM, data, value ORDER BY
@@ -58,7 +58,7 @@
 		select DT_ARRIVAL as data,
 		floor(TIMESTAMPDIFF(SECOND,DT_ARRIVAL, DT_ARRIVED)/60) AS value
 		from
-		T_H_RESULT where
+		T_H_RESULT where status=1 and
 		YEAR(DT_DEPARTURE)>'2000' and
 		YEAR(DT_DEPARTURED)>'2000' and YEAR(DT_ARRIVAL)>'2000' and
 		YEAR(DT_ARRIVED)>'2000' GROUP BY N_CARNUM, data, value ORDER BY

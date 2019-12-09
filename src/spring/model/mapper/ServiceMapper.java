@@ -11,4 +11,7 @@ public interface ServiceMapper {
 	static String column_all = " * ";
 
 	List<ServiceVO> getServiceByHour(@Param("start") Date start, @Param("end") Date end);
+
+	List<ServiceVO> getServiceByTime(@Param("carNum") Integer carNum, @Param("start") Date start,
+			@Param("end") Date end);
 }

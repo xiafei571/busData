@@ -20,10 +20,22 @@ public interface ResultMapper {
 
 	List<ChartData> getAllOfArr();
 
-	@Select("select * from T_H_RESULT order by DT_DEPARTURE limit #{cursor}, #{offset}")
+	@Select("select * from T_H_RESULT where status=1 order by DT_DEPARTURE limit #{cursor}, #{offset}")
 	@ResultMap("resultResultMap")
 	List<ResultVO> getBusList(@Param("cursor") Integer cursor, @Param("offset") Integer offset);
 
-	@Select("select count(*) from T_H_RESULT")
+	@Select("select count(*) from T_H_RESULT where status=1")
 	Integer getResultCount();
+
+	@Select("select count(*) from T_H_RESULT where status=1 and N_CARNUM = #{carNum}")
+	Integer getResultCountByCarNum(@Param("carNum") Integer carNum);
+
+	@Select("select * from T_H_RESULT where status=1 and N_CARNUM = #{carNum} order by DT_DEPARTURE limit #{cursor}, #{offset}")
+	@ResultMap("resultResultMap")
+	List<ResultVO> getSchduleList(@Param("carNum") Integer carNum, @Param("cursor") Integer cursor,
+			@Param("offset") Integer offset);
+
+	@Select("select * from T_H_RESULT where N_RESULTSID = #{resultId}")
+	@ResultMap("resultResultMap")
+	ResultVO getResultInfo(@Param("resultId") Integer resultId);
 }

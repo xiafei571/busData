@@ -8,7 +8,7 @@ import com.alibaba.fastjson.JSONArray;
 public class GPSUtil {
 
 	public static void main(String[] args) {
-		jp256ToWorld(32764902, 128800921);
+		jp256ToWorld(32968678, 129380480);
 	}
 
 	/**

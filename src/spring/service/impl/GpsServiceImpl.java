@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import domain.ResultVO;
 import domain.ServiceVO;
+import spring.model.mapper.ResultMapper;
 import spring.model.mapper.ServiceMapper;
 import spring.service.GpsService;
 import util.GPSUtil;
@@ -22,6 +24,9 @@ public class GpsServiceImpl implements GpsService {
 	@Autowired
 	private ServiceMapper serviceMapper;
 
+	@Autowired
+	private ResultMapper resultMapper;
+
 	@Override
 	public List<ServiceVO> getServiceByHour(Integer timeIndex, Integer timeSize) {
 		// 2019070109
@@ -31,6 +36,16 @@ public class GpsServiceImpl implements GpsService {
 		Date end = c1.getTime();
 		List<ServiceVO> serviceList = serviceMapper.getServiceByHour(start, end);
 		return serviceList;
+	}
+
+	public List<ServiceVO> getServiceByResultId(Integer resultId) {
+		ResultVO result = resultMapper.getResultInfo(resultId);
+		if (null != result) {
+			List<ServiceVO> serviceList = serviceMapper.getServiceByTime(result.getCarNum(), result.getDepartured(),
+					result.getArrived());
+			return serviceList;
+		}
+		return null;
 	}
 
 	private Calendar getCalendarByTime(Integer timeIndex) {
@@ -52,6 +67,20 @@ public class GpsServiceImpl implements GpsService {
 		if (services.isEmpty())
 			return "";
 
+		String featureList = generateFeatureJsonArray(services);
+		return featureList;
+	}
+
+	public String getServiceGeoJsonByResultId(Integer resultId) {
+		List<ServiceVO> services = getServiceByResultId(resultId);
+		if (services.isEmpty())
+			return "";
+
+		String featureList = generateFeatureJsonArray(services);
+		return featureList;
+	}
+
+	private String generateFeatureJsonArray(List<ServiceVO> services) {
 		JSONArray featureList = new JSONArray();
 		Integer speed = services.get(0).getSpeed() / SPEED_INTERVAL;
 		Integer carNum = services.get(0).getCarNum();
@@ -80,8 +109,8 @@ public class GpsServiceImpl implements GpsService {
 					geometry = new JSONObject();
 					geometry.put("type", "LineString");
 					if (i > 0) {// 把前一个点也加进去
-						coordinates.add(GPSUtil.jp256ToWorldJsonChange(services.get(i-1).getLatitude(),
-								services.get(i-1).getLongitude()));
+						coordinates.add(GPSUtil.jp256ToWorldJsonChange(services.get(i - 1).getLatitude(),
+								services.get(i - 1).getLongitude()));
 					}
 					coordinates.add(GPSUtil.jp256ToWorldJsonChange(services.get(i).getLatitude(),
 							services.get(i).getLongitude()));
@@ -108,7 +137,6 @@ public class GpsServiceImpl implements GpsService {
 				featureList.add(line);
 			}
 		}
-
 		return featureList.toJSONString();
 	}
 

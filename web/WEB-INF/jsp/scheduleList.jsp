@@ -16,6 +16,14 @@
 	href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
 	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
 	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+	integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+	crossorigin="" />
+<!-- Make sure you put this AFTER Leaflet's CSS -->
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+	integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+	crossorigin=""></script>
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -23,7 +31,7 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row" style="height: 400px;">
+		<div class="row">
 			<table class="table table-striped">
 				<thead>
 					<tr>
@@ -38,8 +46,8 @@
 						<th scope="col">出発実績日時</th>
 						<th scope="col">到着予定日時</th>
 						<th scope="col">到着実績日時</th>
-						<th scope="col">status</th>
-						<th scope="col">操作</th>
+
+						<th scope="col">Map</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -56,12 +64,7 @@
 									pattern="yyyy/MM/dd HH:mm" /></td>
 							<td><fmt:formatDate value="${list.arrived}"
 									pattern="yyyy/MM/dd HH:mm" /></td>
-							<td><c:if test="${list.arrived < list.arrival}" var="flag" scope="session">
-									<p class="text-success">On time</p>
-								</c:if> <c:if test="${not flag}">
-									<p class="text-danger">Delay</p>
-								</c:if></td>
-							<td><a href="list/${list.carNum}">查看</a>
+							<td><a href="#" onclick="refreshData(${list.resultId})">查看</a>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -83,7 +86,7 @@
 				</ul>
 			</nav>
 		</div>
-	</div>
+		<div id="mapid" class="row" style="height: 800px;"></div>
 	</div>
 	<script src="${pageContext.request.contextPath}/js/jquery-3.2.1.min.js" />
 	<script
@@ -96,11 +99,14 @@
 		crossorigin="anonymous"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/js/page.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/js/map.js"></script>
 	<script type="text/javascript">
 		window.onload = function() {
 			initPage('${result.pagination.pageIndex}',
 					'${result.pagination.pageSize}',
 					'${result.pagination.totalCountPage}');
+			initMap( '${first_resultId}');
 		}
 	</script>
 </body>

@@ -15,4 +15,8 @@ public interface ResultService {
 	Map<String, List<Object>> getAllOfArr();
 
 	PaginationResult<List<ResultVO>> getBusList(Integer pageIndex, Integer pageSize);
+
+	PaginationResult<List<ResultVO>> getBusList(Integer carNum, Integer pageIndex, Integer pageSize);
+	
+	ResultVO getResultInfo(Integer resultId);
 }

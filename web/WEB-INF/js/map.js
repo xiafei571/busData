@@ -1,8 +1,6 @@
 var mymap;
 
-function initMap() {
-
-	
+function initMap(resultId) {
 
 	mymap = L.map('mapid').setView([ 35.679, 139.77 ], 13);
 
@@ -16,32 +14,46 @@ function initMap() {
 						id : 'mapbox.streets'
 					}).addTo(mymap);
 
-	refreshData();
+	refreshData(resultId);
+	
+//	var geojsonFeature = {
+//		    "type": "Feature",
+//		    "geometry": {
+//		        "type": "Point",
+//		        "coordinates": [ 139.699184,35.687196]
+//		    }
+//		};
+//	L.geoJSON(geojsonFeature).addTo(mymap);
 
 }
 
 var linesFeatureLayer = null;
 
-function refreshData() {
-	if(null != linesFeatureLayer){
-		mymap.removeLayer(linesFeatureLayer); 
+function refreshData(resultId) {
+	if (null != linesFeatureLayer) {
+		mymap.removeLayer(linesFeatureLayer);
 	}
-	var year = $('#input_year').val();
-	var month = $('#input_month').val();
-	var day = $('#input_day').val();
-	var hour = $('#input_hour').val();
-	var interval = $('#input_interval').val();
-	
-	var timeIndex = year+month+day+hour;
-	console.log(timeIndex);
-	console.log(interval);
+
+	var req_url;
+	if (null != resultId) {
+		req_url = '../../service/map/' + resultId;
+	} else {
+		var year = $('#input_year').val();
+		var month = $('#input_month').val();
+		var day = $('#input_day').val();
+		var hour = $('#input_hour').val();
+		var interval = $('#input_interval').val();
+
+		var timeIndex = year + month + day + hour;
+		req_url = 'map/json?timeIndex=' + timeIndex + '&timeSize=' + interval;
+	}
 
 	$.ajax({
-		url : 'map/json?timeIndex=' + timeIndex + '&timeSize=' + interval,
+		url : req_url,
 		success : function(result) {
 
 			var states = $.parseJSON(result.res);
-			
+
 			linesFeatureLayer = L.geoJSON(states, {
 				style : function(feature) {
 					switch (feature.properties.speed) {

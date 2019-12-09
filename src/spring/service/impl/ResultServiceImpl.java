@@ -88,9 +88,26 @@ public class ResultServiceImpl implements ResultService {
 		Integer count = resultMapper.getResultCount();
 		pagination.setTotalCount(count);
 
-		List<ResultVO> list = resultMapper.getBusList(pagination.getCursor(), pageSize);
+		List<ResultVO> list = resultMapper.getBusList(pagination.getCursor(), pagination.getOffset());
 		PaginationResult<List<ResultVO>> result = new PaginationResult<List<ResultVO>>(pagination, list);
 
+		return result;
+	}
+
+	@Override
+	public PaginationResult<List<ResultVO>> getBusList(Integer carNum, Integer pageIndex, Integer pageSize) {
+		Pagination pagination = new Pagination(pageIndex, pageSize);
+		Integer count = resultMapper.getResultCountByCarNum(carNum);
+		pagination.setTotalCount(count);
+
+		List<ResultVO> list = resultMapper.getSchduleList(carNum, pagination.getCursor(), pagination.getOffset());
+		PaginationResult<List<ResultVO>> result = new PaginationResult<List<ResultVO>>(pagination, list);
+		return result;
+	}
+
+	@Override
+	public ResultVO getResultInfo(Integer resultId) {
+		ResultVO result = resultMapper.getResultInfo(resultId);
 		return result;
 	}
 

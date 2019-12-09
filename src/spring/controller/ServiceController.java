@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,6 +40,14 @@ public class ServiceController {
 	@ResponseBody
 	public Result<String> getJson(HttpServletRequest request, ModelMap model, Integer timeIndex, Integer timeSize) {
 		Result<String> result = new Result<String>(gpsService.getServiceGeoJsonByHourRefactor(timeIndex, timeSize));
+		return result;
+	}
+
+	@RequestMapping(value = "/map/{resultId}", method = RequestMethod.GET)
+	@ResponseBody
+	public Result<String> getBusJson(@PathVariable Integer resultId, HttpServletRequest request, ModelMap model,
+			Integer timeIndex, Integer timeSize) {
+		Result<String> result = new Result<String>(gpsService.getServiceGeoJsonByResultId(resultId));
 		return result;
 	}
 }

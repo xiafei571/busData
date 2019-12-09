@@ -18,6 +18,12 @@
 		DT_RECEIVED &gt; #{start} AND DT_RECEIVED &lt; #{end} order by
 		N_CARNUM, DT_RECEIVED
 	</select>
+	
+	<select id="getServiceByTime" resultType="domain.ServiceVO"
+        resultMap="serviceResultMap">
+        select * from T_H_SERVICE WHERE N_CARNUM = #{carNum} and
+        DT_RECEIVED &gt;= #{start} AND DT_RECEIVED &lt;= #{end} ORDER BY DT_RECEIVED
+    </select>
 
 </mapper>
 	

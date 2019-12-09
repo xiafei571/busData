@@ -71,7 +71,7 @@
 		src="${pageContext.request.contextPath}/js/map.js"></script>
 	<script type="text/javascript">
 		window.onload = function() {
-			initMap();
+			initMap(null);
 		}
 	</script>
 </body>

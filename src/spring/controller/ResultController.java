@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -56,5 +57,14 @@ public class ResultController {
 		PaginationResult<List<ResultVO>> result = resultService.getBusList(pageIndex, pageSize);
 		modelMap.addAttribute("result", result);
 		return "busList";
+	}
+
+	@RequestMapping(value = "/list/{carNum}", method = RequestMethod.GET)
+	public String getBusSchedule(@PathVariable Integer carNum, Integer pageIndex, Integer pageSize, ModelMap modelMap) {
+		PaginationResult<List<ResultVO>> result = resultService.getBusList(carNum, pageIndex, pageSize);
+		modelMap.addAttribute("first_resultId", result.getPageData().get(0).getResultId());
+		modelMap.addAttribute("result", result);
+		modelMap.addAttribute("carNum", carNum);
+		return "scheduleList";
 	}
 }
