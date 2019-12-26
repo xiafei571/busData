@@ -10,11 +10,13 @@ import org.springframework.stereotype.Component;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import domain.HeatData;
 import domain.ResultVO;
 import domain.ServiceVO;
 import spring.model.mapper.ResultMapper;
 import spring.model.mapper.ServiceMapper;
 import spring.service.GpsService;
+import util.DateUtil;
 import util.GPSUtil;
 
 @Component("gpsService")
@@ -207,6 +209,34 @@ public class GpsServiceImpl implements GpsService {
 		properties.put("speed", speed);
 		line.put("properties", properties);
 		return line;
+	}
+
+	@Override
+	public List<HeatData> getHeatData(Integer timeIndex, Integer timeSize) {
+		Calendar c1 = getCalendarByTime(timeIndex);
+		Date start = c1.getTime();
+		c1.add(Calendar.HOUR_OF_DAY, timeSize);
+		Date end = c1.getTime();
+		List<HeatData> heatDataList = serviceMapper.getHeatDataByHour(start, end);
+		double[] array = new double[2];
+		for (HeatData data : heatDataList) {
+			array = GPSUtil.jp256ToWorld(data.getLatitude(), data.getLongitude());
+			data.setLat(array[0]);
+			data.setLng(array[1]);
+			data.setValue(6 - (data.getSpeed() / SPEED_INTERVAL) > 0 ? 6 - (data.getSpeed() / SPEED_INTERVAL) : 0);
+		}
+
+		return heatDataList;
+	}
+
+	@Override
+	public List<String> getServiceGeoJsonByWeek(Integer resultId) {
+		// TODO Auto-generated method stub
+		ResultVO result = resultMapper.getResultInfo(resultId);
+
+		DateUtil.getDayOfWeek(result.getDeparture());
+
+		return null;
 	}
 
 }

@@ -11,6 +11,13 @@
 		<result property="received" column="DT_RECEIVED" />
 		<result property="speed" column="N_SPEED" />
 	</resultMap>
+	
+	
+    <resultMap type="domain.HeatData" id="heatResultMap">
+        <result property="longitude" column="N_LONGITUDE" />
+        <result property="latitude" column="N_LATITUDE" />
+        <result property="speed" column="N_SPEED" />
+    </resultMap>
 
 	<select id="getServiceByHour" resultType="domain.ServiceVO"
 		resultMap="serviceResultMap">
@@ -23,6 +30,13 @@
         resultMap="serviceResultMap">
         select * from T_H_SERVICE WHERE N_CARNUM = #{carNum} and
         DT_RECEIVED &gt;= #{start} AND DT_RECEIVED &lt;= #{end} ORDER BY DT_RECEIVED
+    </select>
+    
+        <select id="getHeatDataByHour" resultType="domain.HeatData"
+        resultMap="heatResultMap">
+        select N_LONGITUDE, N_LATITUDE, N_SPEED from T_H_SERVICE WHERE N_SPEED &gt; 0 and N_SPEED &lt; 60 and
+        DT_RECEIVED &gt; #{start} AND DT_RECEIVED &lt; #{end} order by
+        N_CARNUM, DT_RECEIVED
     </select>
 
 </mapper>

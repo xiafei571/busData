@@ -14,6 +14,7 @@ import domain.ChartData;
 import domain.ResultVO;
 import spring.model.mapper.ResultMapper;
 import spring.service.ResultService;
+import util.Const.DateFilter;
 
 @Component("resultService")
 public class ResultServiceImpl implements ResultService {
@@ -109,6 +110,18 @@ public class ResultServiceImpl implements ResultService {
 	public ResultVO getResultInfo(Integer resultId) {
 		ResultVO result = resultMapper.getResultInfo(resultId);
 		return result;
+	}
+
+	@Override
+	public List<String> getDateList(String dateFilter, DateFilter dateType) {
+		if (null == dateType || dateType.equals(DateFilter.Year)) {
+			return resultMapper.getYearList();
+		} else if (dateType.equals(DateFilter.Month)) {
+			return resultMapper.getMonthList(dateFilter);
+		} else if (dateType.equals(DateFilter.Day)) {
+			return resultMapper.getDayList(dateFilter);
+		}
+		return null;
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import domain.HeatData;
 import domain.ServiceVO;
 
 public interface ServiceMapper {
@@ -14,4 +15,6 @@ public interface ServiceMapper {
 
 	List<ServiceVO> getServiceByTime(@Param("carNum") Integer carNum, @Param("start") Date start,
 			@Param("end") Date end);
+
+	List<HeatData> getHeatDataByHour(@Param("start") Date start, @Param("end") Date end);
 }

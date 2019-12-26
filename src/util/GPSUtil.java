@@ -8,7 +8,7 @@ import com.alibaba.fastjson.JSONArray;
 public class GPSUtil {
 
 	public static void main(String[] args) {
-		jp256ToWorld(32968678, 129380480);
+		// jp256ToWorld(32968678, 129380480);
 	}
 
 	/**
@@ -48,9 +48,10 @@ public class GPSUtil {
 		result.add(array[1]);
 		return result;
 	};
-	
+
 	/**
 	 * 返回值 lon，lat
+	 * 
 	 * @param jp_lat
 	 * @param jp_lon
 	 * @return
@@ -74,4 +75,5 @@ public class GPSUtil {
 		double result[] = { lat, lon };
 		return result;
 	}
+
 }

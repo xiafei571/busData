@@ -23,13 +23,13 @@ function initPage(pageIndex, pageSize, totalCountPage) {
 	var i = 1;
 	var j = totalCountPage;
 
-	if (pageIndex > 10) {
-		i = pageIndex - 9;
+	if (pageIndex > 5) {
+		i = pageIndex - 4;
 	}
 
-	if (Number(pageIndex) + 9 < totalCountPage) {
+	if (Number(pageIndex) + 4 < totalCountPage) {
 		$("#page_next").before("...");
-		j = Number(pageIndex) + 10;
+		j = Number(pageIndex) + 5;
 	}
 
 	for (; i < j; i++) {
@@ -46,7 +46,7 @@ function initPage(pageIndex, pageSize, totalCountPage) {
 	
 	$("#page_pre").after(page_num);
 	
-	if (pageIndex > 10) {
+	if (pageIndex > 5) {
 		$("#page_pre").after("...");
 	}
 }

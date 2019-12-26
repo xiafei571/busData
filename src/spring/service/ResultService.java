@@ -5,6 +5,7 @@ import java.util.Map;
 
 import common.page.PaginationResult;
 import domain.ResultVO;
+import util.Const.DateFilter;
 
 public interface ResultService {
 
@@ -19,4 +20,6 @@ public interface ResultService {
 	PaginationResult<List<ResultVO>> getBusList(Integer carNum, Integer pageIndex, Integer pageSize);
 	
 	ResultVO getResultInfo(Integer resultId);
+	
+	List<String> getDateList(String dateFilter, DateFilter dateType);
 }

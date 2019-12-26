@@ -49,5 +49,14 @@ public interface Const {
 			this.gender = gender;
 		}
 	}
+	
+	public interface DateFilter {
+		/** 年 */
+		Integer Year = 0;
+		/** 月 */
+		Integer Month = 1;
+		/** 日 */
+		Integer Day = 2;
+	}
 
 }

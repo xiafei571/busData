@@ -38,4 +38,14 @@ public interface ResultMapper {
 	@Select("select * from T_H_RESULT where N_RESULTSID = #{resultId}")
 	@ResultMap("resultResultMap")
 	ResultVO getResultInfo(@Param("resultId") Integer resultId);
+
+	@Select("select DATE_FORMAT(DT_DEPARTURE, '%Y-%m-%d') as dayList from T_H_RESULT where DATE_FORMAT(DT_DEPARTURE, '%Y%m') = #{month} group by dayList order by dayList")
+	List<String> getDayList(@Param("month") String month);
+
+	@Select("select DATE_FORMAT(DT_DEPARTURE, '%Y%m') as monthList from T_H_RESULT where DATE_FORMAT(DT_DEPARTURE, '%Y') = #{year} group by monthList order by monthList")
+	List<String> getMonthList(@Param("year") String year);
+
+	@Select("select DATE_FORMAT(DT_DEPARTURE, '%Y') as yearList from T_H_RESULT group by yearList order by yearList")
+	List<String> getYearList();
+
 }
