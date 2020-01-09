@@ -1,5 +1,6 @@
 package spring.model.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -47,5 +48,7 @@ public interface ResultMapper {
 
 	@Select("select DATE_FORMAT(DT_DEPARTURE, '%Y') as yearList from T_H_RESULT group by yearList order by yearList")
 	List<String> getYearList();
+
+	List<ResultVO> getResultListByTime(String dianame, Date start, Date end);
 
 }

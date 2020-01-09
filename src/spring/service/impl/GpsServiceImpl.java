@@ -234,7 +234,10 @@ public class GpsServiceImpl implements GpsService {
 		// TODO Auto-generated method stub
 		ResultVO result = resultMapper.getResultInfo(resultId);
 
-		DateUtil.getDayOfWeek(result.getDeparture());
+		Date start = DateUtil.getFirstDayOfWeek(result.getDeparture());
+		Date end = DateUtil.getLastDayOfWeek(result.getDeparture());
+
+		List<ResultVO> resultList = resultMapper.getResultListByTime(result.getDianame(), start, end);
 
 		return null;
 	}
